@@ -6,10 +6,11 @@ $dbh = new PDO('mysql:host=localhost;dbname=test', $user, $pass);
 
 if (isset($_POST['insert'])) {
     $vars = $_POST['options'];
-    $numVar = count($vars);
-    
-    foreach($vars as $row){
-        $query = "INSERT INTO `test`(`name`) VALUES ('$row')";
+    $prices = $_POST['price'];
+
+    $arr = array_combine($vars, $prices);
+    foreach ($arr as $k => $v) {
+        $query = "INSERT INTO `test`(`name`, `price`) VALUES ('$k', '$v')";
         $stmt = $dbh->prepare($query);
         $stmt->execute();
     }
@@ -29,17 +30,17 @@ if (isset($_POST['insert'])) {
 <body>
     <form id="myForm" method="post">
         <div id="inputs">
-            <input type="text" name="options[]" placeholder="Insert Option Name">
+            <input type="text" class="optionsinput" id="options[]" name="options[]" placeholder="Insert Option Name">
+            <input type="text" class="pricesinput" id="price[]" name="price[]" placeholder="Insert Price">
         </div> <br>
         <button id="addVar">Add</button>
-        <button type="submit" name="insert">Insert Data</button>
+        <button type="submit" id="insert" name="insert">Insert Data</button>
     </form>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
         $('#addVar').click(function() {
-            var myInput = '<input type="text" name="options[]" placeholder="Insert Option Name">';
+            var myInput = '<br /> <input type="text" class="optionsinput" name="options[]" placeholder="Insert Option Name"> <input type="text" class="pricesinput" id="price" name="price[]" placeholder="Insert Price">';
             $('#inputs').append(myInput);
-
             return false;
         });
     </script>
